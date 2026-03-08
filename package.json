@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate": "node scripts/generate-questions.js"
   },
   "dependencies": {
     "mathjs": "^15.1.1",
@@ -16,10 +17,12 @@
     "vite-plugin-pwa": "^1.2.0"
   },
   "devDependencies": {
+    "@anthropic-ai/sdk": "^0.78.0",
     "@eslint/js": "^9.39.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
+    "dotenv": "^17.3.1",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
