@@ -1,1 +1,5 @@
-[]
+{
+  "gcse-maths": { "number": ["Fractions & Decimals", "Percentages", "Ratio & Proportion", "Standard Form"], "algebra": ["Linear Equations", "Quadratics", "Simultaneous Equations", "Inequalities", "Sequences"], "geometry": ["Angles", "Area & Perimeter", "Pythagoras", "Trigonometry"], "statistics": ["Averages", "Probability"] },
+  "alevel-maths": { "pure": ["Differentiation", "Integration", "Exponentials & Logarithms", "Coordinate Geometry", "Trigonometry", "Sequences & Series"], "statistics": ["Normal Distribution"], "mechanics": ["Kinematics"] },
+  "ib-maths": { "algebra": ["Sequences & Series", "Logarithms", "Binomial Theorem", "Complex Numbers"], "functions": ["Composite & Inverse"], "trigonometry": ["Radians & Unit Circle", "Sine & Cosine Rule"], "calculus": ["Differentiation", "Integration", "Differential Equations"], "statistics": ["Descriptive Statistics", "Chi-Squared Test"] }
+}
