@@ -73,7 +73,10 @@ const XIco = () => (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" 
 
 // ─── Main App ───
 export default function QSprint() {
-  const [screen, setScreen] = useState(SCREENS.WELCOME);
+  const [screen, setScreen] = useState(() => {
+    const savedName = loadState("qs_name", "");
+    return savedName.trim() ? SCREENS.SETUP : SCREENS.WELCOME;
+  });
   const [subject, setSubject] = useState("gcse-maths");
   const [confidence, setConfidence] = useState(null);
   const [dur, setDur] = useState(15);
@@ -123,7 +126,8 @@ export default function QSprint() {
 
   const classify = (cls) => { if(!lastOk) rec(false,cls); if(timer>0){loadQ();setScreen(SCREENS.SPRINT);}else setScreen(SCREENS.SPRINT_REVIEW); };
   const brk = () => { setAllRes(p=>[...p,...results]); setSprints(p=>p+1); setBrkTimer(300); setScreen(SCREENS.BREAK); };
-  const reset = () => { setScreen(SCREENS.WELCOME); setResults([]); setAllRes([]); setSprints(0); setUsed(new Set()); };
+  const reset = () => { setScreen(SCREENS.SETUP); setResults([]); setAllRes([]); setSprints(0); setUsed(new Set()); };
+  const switchUser = () => { setStudentName(""); localStorage.removeItem("qs_name"); setScreen(SCREENS.WELCOME); };
 
   const prog = dur*60>0?1-timer/(dur*60):0;
   const qCnt = questions.filter(q=>q.level===subject).length;
@@ -142,7 +146,7 @@ export default function QSprint() {
       </div></div>)}
 
       {screen===SCREENS.SETUP&&(<div style={S.ctr} className="fade-in"><div style={S.card}>
-        <div style={S.cHead}><p style={S.greet}>Hey {studentName} 👋</p><h2 style={S.cTitle}>Set up your session</h2></div><Wave h={18}/>
+        <div style={S.cHead}><p style={S.greet}>Hey {studentName} 👋</p><h2 style={S.cTitle}>Set up your session</h2><button style={S.backLink} onClick={switchUser}>← Not {studentName}? Switch user</button></div><Wave h={18}/>
         <div style={S.cBody}>
           <div style={S.sec}><label style={S.lbl}>Subject & Level</label><div style={S.chips}>{[{id:"gcse-maths",l:"GCSE Maths"},{id:"alevel-maths",l:"A-Level Maths"},{id:"ib-maths",l:"IB Maths"}].map(o=>(<button key={o.id} style={{...S.chip,...(subject===o.id?S.chipAct:{})}} onClick={()=>setSubject(o.id)}>{o.l}</button>))}</div><p style={S.ht}>{qCnt} questions · {tCnt} topic areas</p></div>
           <div style={S.sec}><label style={S.lbl}>How confident are you feeling?</label><div style={S.confR}>{[{id:"low",l:"I struggle",d:"Getting the basics down",c:T.terra},{id:"mid",l:"Getting there",d:"Okay but not confident",c:"#d4882a"},{id:"high",l:"Fairly solid",d:"Ready to be challenged",c:T.blue}].map(o=>(<button key={o.id} style={{...S.confC,...(confidence===o.id?{borderColor:o.c,backgroundColor:o.c+"10",boxShadow:`0 0 0 1px ${o.c}30`}:{})}} onClick={()=>setConfidence(o.id)}><span style={{...S.confL,color:confidence===o.id?o.c:T.text}}>{o.l}</span><span style={S.confD}>{o.d}</span></button>))}</div></div>
@@ -153,7 +157,11 @@ export default function QSprint() {
 
       {screen===SCREENS.READY&&(<div style={S.ctr} className="fade-in"><div style={S.card}>
         <div style={{...S.cHead,textAlign:"center"}}><div style={{fontSize:40,marginBottom:4}}>📝</div><h2 style={{...S.cTitle,textAlign:"center"}}>Ready?</h2></div><Wave h={18}/>
-        <div style={{...S.cBody,textAlign:"center"}}><p style={{fontSize:16,color:T.text,lineHeight:1.5,marginBottom:20}}>You've got <strong>{dur} minutes</strong> of focused practice ahead.</p><div style={{display:"inline-block",textAlign:"left"}}><div style={S.chkI}>✓ Pen and paper to hand</div><div style={S.chkI}>✓ Calculator nearby</div><div style={S.chkI}>✓ Distractions put away</div></div><button style={{...S.bt,marginTop:20,padding:"16px 48px",fontSize:17}} onClick={go}>Begin sprint</button></div>
+        <div style={S.cBody}>
+          <div style={{textAlign:"center",marginBottom:20}}><p style={{fontSize:15,lineHeight:1.6,color:T.text}}>{dur} minutes · {subject.replace("-"," ").replace(/\b\w/g,l=>l.toUpperCase())}</p></div>
+          <button style={S.bp} onClick={go}>Begin sprint →</button>
+          <div style={{textAlign:"center",marginTop:12}}><button style={S.backLink} onClick={()=>setScreen(SCREENS.SETUP)}>← Back to setup</button></div>
+        </div>
       </div></div>)}
 
       {screen===SCREENS.SPRINT&&curQ&&(<div style={S.sprint} className="fade-in">
@@ -167,9 +175,9 @@ export default function QSprint() {
         <div style={S.fbA} className="slide-up">{lastOk?(<><div style={S.fbOk}><div style={S.fbIcOk}><ChkIco/></div><h3 style={S.fbTOk}>Correct!</h3><p style={S.fbAns}>{curQ.answerLabel}</p></div><button style={S.bp} onClick={()=>classify("correct")}>Next question →</button></>):(<><div style={S.fbBad}><div style={S.fbIcBad}><XIco/></div><h3 style={S.fbTBad}>Not quite</h3><p style={S.fbYou}>You answered: {ans}</p><p style={S.fbCorr}>Correct answer: {curQ.answerLabel}</p></div><div style={S.solB}><div style={S.solH}>Worked solution</div><div className="hint-content" style={S.solC}>{curQ.hints[2]}</div></div><p style={S.clsPrm}>What happened?</p><div style={S.clsR}><button style={S.clsBtn} onClick={()=>classify("slip_up")}>💡 Slip-up / I understand</button><button style={S.clsBtnF} onClick={()=>classify("need_practice")}>🏳️ Need more practice</button></div></>)}</div>
       </div>)}
 
-      {screen===SCREENS.SPRINT_REVIEW&&(<div style={S.ctr} className="fade-in"><div style={S.card}><div style={{...S.cHead,textAlign:"center"}}><h2 style={{...S.cTitle,textAlign:"center"}}>Sprint complete! 🎉</h2></div><Wave h={18}/><div style={S.cBody}><div style={S.rvSt}><div style={S.rvS}><div style={S.rvN}>{results.filter(r=>r.correct).length}</div><div style={S.rvL}>Correct</div></div><div style={S.rvD}/><div style={S.rvS}><div style={S.rvN}>{results.filter(r=>r.classification==="slip_up").length}</div><div style={S.rvL}>Slip-ups</div></div><div style={S.rvD}/><div style={S.rvS}><div style={S.rvN}>{results.filter(r=>r.classification==="need_practice").length}</div><div style={S.rvL}>To revisit</div></div></div><button style={S.bp} onClick={brk}>Take a 5-minute break</button><button style={S.bs} onClick={()=>{setAllRes(p=>[...p,...results]);setSprints(p=>p+1);setScreen(SCREENS.SESSION_SUMMARY)}}>End session</button></div></div></div>)}
+      {screen===SCREENS.SPRINT_REVIEW&&(<div style={S.ctr} className="fade-in"><div style={S.card}><div style={{...S.cHead,textAlign:"center"}}><h2 style={{...S.cTitle,textAlign:"center"}}>Sprint complete! 🎉</h2></div><Wave h={18}/><div style={S.cBody}><div style={S.rvSt}><div style={S.rvS}><div style={S.rvN}>{results.filter(r=>r.correct).length}</div><div style={S.rvL}>Correct</div></div><div style={S.rvD}/><div style={S.rvS}><div style={S.rvN}>{results.filter(r=>r.classification==="slip_up").length}</div><div style={S.rvL}>Slip-ups</div></div><div style={S.rvD}/><div style={S.rvS}><div style={S.rvN}>{results.filter(r=>r.classification==="need_practice").length}</div><div style={S.rvL}>To revisit</div></div></div><button style={S.bp} onClick={brk}>Take a 5-minute break</button><button style={S.bs} onClick={()=>{setAllRes(p=>[...p,...results]);setSprints(p=>p+1);setScreen(SCREENS.SESSION_SUMMARY)}}>End session</button><div style={{textAlign:"center",marginTop:8}}><button style={S.backLink} onClick={()=>{setAllRes(p=>[...p,...results]);setSprints(p=>p+1);setScreen(SCREENS.SETUP)}}>← Back to menu</button></div></div></div></div>)}
 
-      {screen===SCREENS.BREAK&&(<div style={S.brkScr} className="fade-in"><div style={S.brkC}><h2 style={S.brkT}>Break time</h2><p style={S.brkSub}>Step away. Stretch. Get water.</p><div style={{display:"flex",justifyContent:"center",marginBottom:28}}><MilkGlass fill={brkTimer/300} time={fmt(brkTimer)} size="large" warning={brkTimer<30}/></div><button style={S.bp} onClick={()=>setScreen(SCREENS.READY)}>Start next sprint</button><button style={{...S.bs,marginTop:8}} onClick={()=>setScreen(SCREENS.SESSION_SUMMARY)}>End session</button></div></div>)}
+      {screen===SCREENS.BREAK&&(<div style={S.brkScr} className="fade-in"><div style={S.brkC}><h2 style={S.brkT}>Break time</h2><p style={S.brkSub}>Step away. Stretch. Get water.</p><div style={{display:"flex",justifyContent:"center",marginBottom:28}}><MilkGlass fill={brkTimer/300} time={fmt(brkTimer)} size="large" warning={brkTimer<30}/></div><button style={S.bp} onClick={()=>setScreen(SCREENS.READY)}>Start next sprint</button><button style={{...S.bs,marginTop:8}} onClick={()=>setScreen(SCREENS.SESSION_SUMMARY)}>End session</button><div style={{textAlign:"center",marginTop:8}}><button style={S.backLink} onClick={()=>setScreen(SCREENS.SETUP)}>← Back to menu</button></div></div></div>)}
 
       {screen===SCREENS.SESSION_SUMMARY&&(<div style={S.ctr} className="fade-in"><div style={S.sumCard}><div style={S.sumBnr}><Wave color="#fff" h={14}/></div><div style={S.sumIn}><h1 style={S.sumTi}>Session Facts</h1><div style={S.sumTk}/><div style={S.sumRw}><span style={S.sumBd}>Sprints Completed</span><span style={S.sumBd}>{sprints}</span></div><div style={S.sumRw}><span style={S.sumBd}>Focus Time</span><span style={S.sumBd}>{sprints*dur} min</span></div><div style={S.sumMd}/><div style={{textAlign:"right",padding:"2px 0"}}><span style={S.sumSB}>Accuracy</span></div><div style={S.sumTn}/>{Object.entries(masteryMap).map(([t,d])=>(<div key={t}><div style={S.sumRw}><span style={S.sumTx}>{t} <span style={S.sumSm}>({d.attempts} Qs)</span></span><span style={S.sumBd}>{Math.round(d.score*100)}%</span></div><div style={S.sumTn}/></div>))}<div style={S.sumTk}/><p style={S.sumDis}>Next session will prioritise weaker areas while maintaining strengths.</p><button style={{...S.bt,width:"100%",marginTop:16}} onClick={reset}>Finish & Close</button></div></div></div>)}
       </div>
@@ -200,6 +208,7 @@ const S = {
   bp:{display:"block",width:"100%",maxWidth:400,margin:"0 auto",padding:"14px 24px",fontSize:16,fontWeight:600,color:"#fff",backgroundColor:T.blue,borderRadius:8},
   bt:{display:"inline-block",padding:"14px 28px",fontSize:16,fontWeight:600,color:"#fff",backgroundColor:T.terra,borderRadius:8},
   bs:{display:"block",width:"100%",maxWidth:400,margin:"0 auto",padding:"12px 24px",fontSize:15,fontWeight:500,color:T.textLt,backgroundColor:"transparent",borderRadius:8,border:`1.5px solid ${T.bdr}`,marginTop:8},
+  backLink:{display:"inline-block",padding:"8px 0",fontSize:14,color:T.blue,fontWeight:500,cursor:"pointer",textDecoration:"none",background:"none",border:"none",fontFamily:"'IBM Plex Sans',sans-serif",transition:"opacity .15s"},
   bd:{display:"block",width:"100%",maxWidth:400,margin:"0 auto",padding:"12px",marginTop:10,backgroundColor:T.errBg,color:T.errRed,border:`1px solid ${T.errBdr}`,borderRadius:8,fontWeight:600},
   bg:{padding:"10px 20px",fontSize:14,fontWeight:500,color:T.textMut,backgroundColor:"transparent",border:`1px solid ${T.bdr}`,borderRadius:8},
   bgSm:{display:"inline-block",marginTop:8,padding:"4px 10px",fontSize:12,color:T.textMut,backgroundColor:"transparent",border:"none"},
