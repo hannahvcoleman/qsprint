@@ -131,7 +131,7 @@ export default function QSprint() {
 
   return (
     <div style={S.shell}>
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');*{box-sizing:border-box;margin:0;padding:0}@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}.fade-in{animation:fadeIn .4s ease-out forwards}.slide-up{animation:slideUp .5s ease-out forwards}input:focus{outline:none;border-color:${T.blue}!important}button{cursor:pointer;border:none;font-family:'IBM Plex Sans',sans-serif;transition:all .15s}button:active{transform:scale(.97)}.hint-content{white-space:pre-line}body{background-color:${T.cream};margin:0;padding:0}@media (max-width: 480px){.frame{width:100vw;height:100vh;border-radius:0;box-shadow:none;background:${T.white}}@media (min-width: 481px) and (max-width: 768px){.frame{aspect-ratio:4/5;max-width:95vw}}@media (min-width: 769px){.frame{aspect-ratio:3/5;max-height:95vh}}`}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');*{box-sizing:border-box;margin:0;padding:0}@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}.fade-in{animation:fadeIn .4s ease-out forwards}.slide-up{animation:slideUp .5s ease-out forwards}input:focus{outline:none;border-color:${T.blue}!important}button{cursor:pointer;border:none;font-family:'IBM Plex Sans',sans-serif;transition:all .15s}button:active{transform:scale(.97)}.hint-content{white-space:pre-line}body{background-color:${T.cream};margin:0;padding:0}@media (max-width: 480px){.frame{width:100vw;height:100vh;border-radius:0;box-shadow:none;background:${T.white}}}@media (min-width: 481px) and (max-width: 768px){.frame{max-width:95vw;height:95vh;border-radius:16px}}@media (min-width: 769px){.frame{max-width:480px;max-height:92vh;width:100%;height:92vh;border-radius:20px;box-shadow:0 8px 40px rgba(30,27,75,0.10)}}`}</style>
       <script>{`document.body.style.backgroundColor = '${T.cream}';`}</script>
 
       <div style={S.frame} className="frame">
@@ -180,15 +180,15 @@ export default function QSprint() {
 // ─── Styles ───
 const S = {
   shell:{width:"100vw",height:"100vh",background:T.cream,display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",fontFamily:"'IBM Plex Sans',sans-serif",color:T.text},
-  frame:{background:T.white,borderRadius:"20px",boxShadow:"0 8px 40px rgba(30,27,75,0.10)",overflowY:"auto",overflowX:"hidden",scrollbarWidth:"none","&::-webkit-scrollbar":{display:"none"},"-webkit-overflow-scrolling":"touch"},
+  frame:{background:T.white,overflowY:"auto",overflowX:"hidden",scrollbarWidth:"none","&::-webkit-scrollbar":{display:"none"},"-webkit-overflow-scrolling":"touch",padding:"20px 24px"},
   ctr:{width:"100%",padding:"20px",display:"flex",alignItems:"center",justifyContent:"center",minHeight:"100%"},
-  welc:{width:"100%",maxWidth:480,overflow:"hidden"},
+  welc:{width:"100%",overflow:"hidden"},
   logoRow:{display:"flex",alignItems:"center",gap:10,marginBottom:20,padding:"0 8px"},
   logoTxt:{fontFamily:"'Playfair Display',serif",fontSize:24,fontWeight:700,color:T.blue,letterSpacing:"-0.02em"},
   hero:{fontFamily:"'Playfair Display',serif",fontStyle:"italic",fontSize:32,fontWeight:900,color:T.navy,lineHeight:1.2,marginTop:28,marginBottom:16,letterSpacing:"-0.02em"},
   heroSub:{fontSize:15,color:T.textLt,lineHeight:1.6,marginBottom:28},
   wNote:{marginTop:16,fontSize:13,color:T.textMut,textAlign:"center"},
-  card:{width:"100%",maxWidth:520,backgroundColor:T.white,borderRadius:14,overflow:"hidden",boxShadow:"0 2px 20px rgba(30,27,75,0.06)"},
+  card:{width:"100%",backgroundColor:T.white,borderRadius:14,overflow:"hidden",boxShadow:"0 2px 20px rgba(30,27,75,0.06)"},
   cHead:{padding:"28px 28px 16px"},
   cBody:{padding:"20px 28px 28px"},
   cTitle:{fontFamily:"'Playfair Display',serif",fontStyle:"italic",fontSize:26,fontWeight:700,color:T.navy,letterSpacing:"-0.01em"},
@@ -214,11 +214,11 @@ const S = {
   durCA:{borderColor:T.blue,backgroundColor:T.blue+"0c",color:T.blue},
   chkI:{fontSize:15,color:T.textLt,padding:"3px 0"},
   sprint:{width:"100%",display:"flex",flexDirection:"column",minHeight:"100%"},
-  topB:{width:"100%",display:"flex",alignItems:"center",gap:14,padding:"14px 0 10px",position:"sticky",top:0,zIndex:10,backgroundColor:T.white},
+  topB:{width:"100%",display:"flex",alignItems:"center",gap:14,padding:"12px 0",position:"sticky",top:0,zIndex:10,backgroundColor:T.white},
   pBar:{flex:1,height:3,backgroundColor:T.bdr,borderRadius:2,overflow:"hidden"},
   pFill:{height:"100%",backgroundColor:T.blue,borderRadius:2,transition:"width 1s linear"},
   exitB:{background:"none",border:"none",color:T.textMut,fontWeight:600,fontSize:13},
-  qA:{width:"100%",flex:1,display:"flex",flexDirection:"column",maxWidth:680,margin:"0 auto",paddingTop:16},
+  qA:{width:"100%",flex:1,display:"flex",flexDirection:"column",paddingTop:16},
   tTag:{fontSize:11,fontWeight:600,color:T.blue,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:14},
   qTxt:{fontFamily:"'Playfair Display',serif",fontSize:24,lineHeight:1.35,color:T.navy,marginBottom:20,fontWeight:700},
   hBox:{backgroundColor:T.hintBg,border:`1px solid ${T.hintBdr}`,borderRadius:8,padding:"12px 16px",marginBottom:16},
@@ -229,7 +229,7 @@ const S = {
   aArea:{marginTop:"auto",paddingTop:20},
   aRow:{display:"flex",gap:8},
   aInp:{flex:1,padding:"13px 14px",fontSize:17,fontFamily:"'IBM Plex Mono',monospace",border:`2px solid ${T.bdr}`,borderRadius:8,backgroundColor:T.white,color:T.navy},
-  fbA:{width:"100%",flex:1,display:"flex",flexDirection:"column",maxWidth:680,margin:"0 auto",paddingTop:32,gap:14},
+  fbA:{width:"100%",flex:1,display:"flex",flexDirection:"column",paddingTop:32,gap:14},
   fbOk:{textAlign:"center",padding:"28px 20px",backgroundColor:T.okBg,borderRadius:12,border:`1px solid ${T.okBdr}`},
   fbIcOk:{display:"inline-flex",alignItems:"center",justifyContent:"center",width:44,height:44,borderRadius:"50%",backgroundColor:T.okGreen,color:"#fff",marginBottom:10},
   fbTOk:{fontFamily:"'Playfair Display',serif",fontStyle:"italic",fontSize:26,color:T.okGreen,marginBottom:4},
@@ -259,7 +259,7 @@ const S = {
   mod:{backgroundColor:T.white,padding:28,borderRadius:12,maxWidth:380,width:"90%",textAlign:"center"},
   modT:{fontFamily:"'Playfair Display',serif",fontStyle:"italic",fontSize:22,color:T.navy,marginBottom:10},
   modP:{color:T.textLt,marginBottom:20,fontSize:14},
-  sumCard:{width:"100%",maxWidth:400,backgroundColor:T.white,border:`3px solid ${T.navy}`,overflow:"hidden"},
+  sumCard:{width:"100%",backgroundColor:T.white,border:`3px solid ${T.navy}`,overflow:"hidden"},
   sumBnr:{backgroundColor:T.blue,padding:"12px 0 0"},
   sumIn:{padding:20},
   sumTi:{fontFamily:"'Playfair Display',serif",fontSize:32,fontWeight:900,color:T.navy,letterSpacing:"-1px"},
